@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engagement Analysis Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .video-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stats-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
+        .stat-card {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center; margin-bottom: 30px;">Real-Time Engagement Analysis</h1>
+
+    <div class="container">
+        <div class="video-section">
+            <h2>Live Feed</h2>
+            <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+        </div>
+        
+        <div class="stats-section">
+            <h2>Live Statistics</h2>
+            
+            <div class="stat-card">
+                <div class="stat-value" id="engagement-val">0</div>
+                <div class="stat-label">Engagement Score</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value" id="emotion-val">Waiting...</div>
+                <div class="stat-label">Detected Emotion</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value" id="status-val">Waiting...</div>
+                <div class="stat-label">Status</div>
+            </div>
+
+            <canvas id="engagementChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('engagementChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Engagement Score',
+                    data: [],
+                    borderColor: '#007bff',
+                    tension: 0.4,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        function updateStats() {
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('engagement-val').innerText = data.engagement_score;
+                    document.getElementById('emotion-val').innerText = data.emotion;
+                    document.getElementById('status-val').innerText = data.status;
+
+                    // Update Chart
+                    const now = new Date().toLocaleTimeString();
+                    chart.data.labels.push(now);
+                    chart.data.datasets[0].data.push(data.engagement_score);
+
+                    if (chart.data.labels.length > 20) {
+                        chart.data.labels.shift();
+                        chart.data.datasets[0].data.shift();
+                    }
+                    chart.update();
+                })
+                .catch(err => console.error('Error fetching stats:', err));
+        }
+
+        setInterval(updateStats, 1000);
+    </script>
+
+</body>
+</html>

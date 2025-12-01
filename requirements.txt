@@ -1,0 +1,9 @@
+opencv-python
+ultralytics
+torch
+torchvision
+flask
+numpy
+pandas
+deepface
+tf-keras
