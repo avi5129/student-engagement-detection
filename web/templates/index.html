@@ -1,143 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engagement Analysis Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>EduVision.ai | Real Insights</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
+        :root {
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
             margin: 0;
-            padding: 20px;
-            color: #333;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            overflow-x: hidden;
         }
-        .video-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
-        .stats-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .nav-links a.btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .hero {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.05) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+        }
+
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            max-width: 800px;
+            color: #0f172a;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .cta-btns {
+            display: flex;
             gap: 20px;
         }
-        img {
-            max-width: 100%;
-            border-radius: 5px;
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .stat-card {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
         }
-        .stat-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
+
+        .btn-secondary {
+            background: var(--bg-white);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-main);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         }
-        .stat-label {
-            font-size: 14px;
-            color: #666;
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        .features {
+            padding: 100px 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: left;
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
         }
     </style>
 </head>
+
 <body>
-
-    <h1 style="text-align: center; margin-bottom: 30px;">Real-Time Engagement Analysis</h1>
-
-    <div class="container">
-        <div class="video-section">
-            <h2>Live Feed</h2>
-            <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <nav>
+        <div class="logo">EduVision.ai</div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="/login" class="btn">Log In</a>
+            <a href="/register" class="btn">Sign Up</a>
         </div>
-        
-        <div class="stats-section">
-            <h2>Live Statistics</h2>
-            
-            <div class="stat-card">
-                <div class="stat-value" id="engagement-val">0</div>
-                <div class="stat-label">Engagement Score</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-value" id="emotion-val">Waiting...</div>
-                <div class="stat-label">Detected Emotion</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-value" id="status-val">Waiting...</div>
-                <div class="stat-label">Status</div>
-            </div>
+    </nav>
 
-            <canvas id="engagementChart"></canvas>
+    <section class="hero">
+        <h1>Unlock <span>Real Insights</span> with Vision AI</h1>
+        <p>Advanced computer vision to analyze engagement, detect emotions, and optimize experiences in real-time. Gain
+            actionable data effortlessly.</p>
+        <div class="cta-btns">
+            <a href="/register" class="btn-primary">Get Started</a>
+            <a href="/live" class="btn-secondary">Try Demo</a>
         </div>
-    </div>
+    </section>
 
-    <script>
-        const ctx = document.getElementById('engagementChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Engagement Score',
-                    data: [],
-                    borderColor: '#007bff',
-                    tension: 0.4,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100
-                    }
-                }
-            }
-        });
-
-        function updateStats() {
-            fetch('/api/stats')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('engagement-val').innerText = data.engagement_score;
-                    document.getElementById('emotion-val').innerText = data.emotion;
-                    document.getElementById('status-val').innerText = data.status;
-
-                    // Update Chart
-                    const now = new Date().toLocaleTimeString();
-                    chart.data.labels.push(now);
-                    chart.data.datasets[0].data.push(data.engagement_score);
-
-                    if (chart.data.labels.length > 20) {
-                        chart.data.labels.shift();
-                        chart.data.datasets[0].data.shift();
-                    }
-                    chart.update();
-                })
-                .catch(err => console.error('Error fetching stats:', err));
-        }
-
-        setInterval(updateStats, 1000);
-    </script>
-
+    <section id="features" class="features">
+        <div class="feature-card">
+            <div class="feature-icon">👁️</div>
+            <h3>Real-Time Tracking</h3>
+            <p>Monitor engagement instantly using state-of-the-art vision models. Identify when focus wanes and adapt
+                immediately.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Actionable Analytics</h3>
+            <p>Review post-session dashboards to understand engagement trends over time, helping you improve your
+                outcomes.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🧠</div>
+            <h3>Emotion Detection</h3>
+            <p>Understand the emotional state of your audience. Are they confused, bored, or highly engaged? Our AI
+                breaks it down.</p>
+        </div>
+    </section>
 </body>
+
 </html>

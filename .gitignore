@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+dist/
+build/
 
 # Virtual Environment
 venv/
@@ -11,6 +14,33 @@ env/
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Project specific
+# ===== Large Model Weights (downloaded at runtime) =====
 yolov8n-pose.pt
+yolov12n-cls.pt
+yolo_emotion_model_best.pt
+custom_emotion_model.h5
+custom_emotion_model_best.h5
+face_landmarker.task
+
+# ===== Datasets (too large for git) =====
+data_prepared/
+data_prepared_expanded_final/
+zenodo_dataset.zip
+zenodo_extracted/
+
+# ===== Training Runs =====
+runs/
+
+# ===== Database (regenerated at runtime) =====
+engagement.db
+engagement_backup.db
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Local YOLOv12 repo (cloned at setup) =====
+yolov12/

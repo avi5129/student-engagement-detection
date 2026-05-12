@@ -16,6 +16,14 @@ class VideoSource:
         if not self.cap.isOpened():
             raise ValueError(f"Unable to open video source: {self.source}")
 
+        # Attempt to disable auto-focus and auto-exposure/WB if possible
+        # This is hardware dependent and might not work on all cameras
+        try:
+            self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 0) # 0 = off, 1 = on
+            self.cap.set(cv2.CAP_PROP_FOCUS, 0)     # Set focus to infinity/0
+        except Exception as e:
+            print(f"Could not set camera properties: {e}")
+
     def get_frame(self):
         """
         Capture a frame from the video source.
