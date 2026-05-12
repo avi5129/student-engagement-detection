@@ -55,7 +55,7 @@ A real-time AI-powered system that detects and analyzes student engagement level
 ### 1. Clone this Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/student-engagement-detection.git
+git clone https://github.com/avi5129/student-engagement-detection.git
 cd student-engagement-detection
 ```
 
